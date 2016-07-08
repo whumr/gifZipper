@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GifZipper</string>
+    <string name="file_name">文件名</string>
+    <string name="file_name_tip">test(不用输后缀gif)</string>
+    <string name="ratio">压缩比</string>
+    <string name="ratio_tip">压缩比,2的整数倍</string>
+    <string name="file_size">帧大小</string>
+    <string name="file_size_tip">每帧的文件最大值，单位kb</string>
+    <string name="zip">压缩</string>
+	
+</resources>

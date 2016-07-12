@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 蓝色 -->
+	<color name="blue">#60aabf</color>
+	<color name="white">#ffffff</color>
+	<color name="black">#000000</color>
+	<color name="transparent">#00000000</color>
+	<color name="background">#f3f3f3</color>
+	<color name="bg_title">#3399DB</color>
+	<color name="title_text">#3e4346</color>
+	
+	<color name="black_21">#212121</color>
+	<color name="black_28">#282828</color>
+	<color name="black_2b">#2B2B2B</color>
+	<color name="black_2d">#2D2D2D</color>
+	<color name="black_33">#333333</color>
+	<color name="black_43">#434343</color>
+	
+	<color name="gray_b8">#B8B8B8</color>
+	<color name="gray_d3">#D3D3D3</color>
+	<color name="gray_d7">#D7D7D7</color>
+	<color name="gray_e5">#E5E5E5</color>
+	<color name="gray_f6">#F6F6F6</color>
+	<color name="gray_58">#585858</color>
+	<color name="gray_5f">#5f5f5f</color>
+	<color name="gray_6c">#6c6c6c</color>
+	<color name="gray_73">#737373</color>
+	<color name="gray_79">#797979</color>
+	<color name="gray_8d">#8D8D8D</color>
+	<color name="gray_98">#989898</color>
+	
+	<color name="blue_overlaybig">#5F94CA</color>
+	
+	<color name="red1">#F93239</color>
+	
+		<!-- zxing color start -->
+	<color name="line_listview">#ffe2e2e2</color>
+	<color name="contents_text">#ff000000</color>
+    <color name="encode_view">#ffffffff</color>
+    <color name="possible_result_points">#c0ffbd21</color><!-- Android standard ICS color -->
+    <color name="result_minor_text">#ffc0c0c0</color>
+    <color name="result_points">#c099cc00</color><!-- Android standard ICS color -->
+    <color name="result_text">#ffffffff</color>
+    <color name="result_view">#b0000000</color>
+    <color name="status_text">#ffffffff</color>
+    <color name="viewfinder_laser">#ffcc0000</color><!-- Android standard ICS color -->
+    <color name="viewfinder_mask">#60000000</color>
+	<!-- zxing color end -->
+	
+	<color name="maintab_selection">#389cd1</color>
+	
+	<color name="gray_67">#676767</color>
+	<color name="gray_56">#565656</color>
+	<color name="gray_ad">#adadad</color>
+	<color name="gray_b9">#b9b9b9</color>
+	<color name="gray_b5">#b5b5b5</color>
+	<color name="gray_be">#bebebe</color>
+	<color name="gray_97">#979797</color>
+	<color name="ffa200">#ffa200</color>
+	<color name="about_txt">#3399db</color>
+	<color name="black_39">#393939</color>
+	<color name="black_53">#535353</color>
+	<color name="blue_msg">#3399db</color>
+	<color name="green_event">#42dc42</color>
+	<color name="green_contact">#27d000</color>
+	<color name="red_event">#f84141</color>
+	<color name="province_line_border">#C7C7C7</color>
+	<color name="account_bg">#F0F0F0</color>
+
+	<color name="blue_39db">#3399db</color> 
+	<color name="black_42">#424141</color>
+	<color name="gray_b6">#b6b6b6</color>
+	<color name="gray_96">#969696</color>
+	<color name="bg_listview">#00000000</color>
+	
+	<color name="selected_img">#77000000</color>
+	
+	<!-- 评论列表的文字颜色 -->
+	<color name="recommend">#45be7d</color>
+	<color name="buy">#e3726d</color>
+	<color name="perform">#f87b32</color>
+	<color name="event">#d34ac8</color>
+	<color name="friend">#3593cd</color>
+	<color name="activity">#eecc24</color>
+	
+	<!-- 
+	<color name="font_color_black">#000000</color>
+	<color name="font_color_yellow">#ff9c00</color>
+	<color name="font_color_red">#c10000</color>
+	<color name="font_color_blue">#0070c1</color>
+	<color name="font_color_green">#00b150</color>
+	<color name="font_color_purple">#531483</color>
+	 -->
+	
+</resources>

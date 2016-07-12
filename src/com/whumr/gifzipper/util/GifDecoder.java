@@ -123,7 +123,7 @@ public class GifDecoder {
     public int read(InputStream is) throws IOException {
         init();
         if (is != null) {
-            byte[] buffer = Utils.streamToBytes(is);
+            byte[] buffer = Tools.streamToBytes(is);
             mGifHeader = new GifHeader(buffer, mOffset);
             mOffset += mGifHeader.size;
             mWidth = mGifHeader.getWidth();
@@ -509,7 +509,7 @@ public class GifDecoder {
 
         public void setTransparentColorFlagTrue() {
             int value = getReserved() | getDisposalMothod() | getUserInputFlag() | 0x01;
-            bytes[3] = (byte) Integer.parseInt(Utils.toHex(value, 2), 16);
+            bytes[3] = (byte) Integer.parseInt(Tools.toHex(value, 2), 16);
         }
     }
 

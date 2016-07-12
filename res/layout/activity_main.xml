@@ -75,8 +75,19 @@
             android:layout_height="wrap_content"/>
 
 	    <Button 
+	        android:id="@+id/choose_btn"
+	        android:layout_weight="2"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:text="@string/choose"/>
+
+	    <View android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+	    <Button 
 	        android:id="@+id/zip_btn"
-	        android:layout_weight="1"
+	        android:layout_weight="2"
 	        android:layout_width="0dp"
 	        android:layout_height="wrap_content"
 	        android:text="@string/zip"/>

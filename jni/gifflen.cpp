@@ -53,11 +53,11 @@ FILE *pGif = NULL;
 
 extern "C"
 {
-JNIEXPORT jint JNICALL Java_org_jiggawatt_giffle_Giffle_Init(JNIEnv *ioEnv, jobject ioThis, jstring gifName,
+JNIEXPORT jint JNICALL Java_com_whumr_gifzipper_util_gif_GifEncoder_Init(JNIEnv *ioEnv, jobject ioThis, jstring gifName,
                                                              jint w, jint h, jint numColors, jint quality, jint frameDelay);
-JNIEXPORT void JNICALL Java_org_jiggawatt_giffle_Giffle_Close(JNIEnv *ioEnv, jobject ioThis);
-JNIEXPORT jint JNICALL Java_org_jiggawatt_giffle_Giffle_AddFrame(JNIEnv *ioEnv, jobject ioThis, jintArray inArray);
-JNIEXPORT jstring JNICALL Java_org_jiggawatt_giffle_Giffle_test(JNIEnv *ioEnv, jobject ioThis);
+JNIEXPORT void JNICALL Java_com_whumr_gifzipper_util_gif_GifEncoder_Close(JNIEnv *ioEnv, jobject ioThis);
+JNIEXPORT jint JNICALL Java_com_whumr_gifzipper_util_gif_GifEncoder_AddFrame(JNIEnv *ioEnv, jobject ioThis, jintArray inArray);
+JNIEXPORT jstring JNICALL Java_com_whumr_gifzipper_util_gif_GifEncoder_test(JNIEnv *ioEnv, jobject ioThis);
 };
 
 
@@ -78,7 +78,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
 }
 
 
-JNIEXPORT jint JNICALL Java_org_jiggawatt_giffle_Giffle_Init(JNIEnv *ioEnv, jobject ioThis, jstring gifName,
+JNIEXPORT jint JNICALL Java_com_whumr_gifzipper_util_gif_GifEncoder_Init(JNIEnv *ioEnv, jobject ioThis, jstring gifName,
                                                              jint w, jint h, jint numColors, jint quality, jint frameDelay)
 {
 	const char *str;
@@ -136,7 +136,7 @@ JNIEXPORT jint JNICALL Java_org_jiggawatt_giffle_Giffle_Init(JNIEnv *ioEnv, jobj
 }
 
 
-JNIEXPORT void JNICALL Java_org_jiggawatt_giffle_Giffle_Close(JNIEnv *ioEnv, jobject ioThis)
+JNIEXPORT void JNICALL Java_com_whumr_gifzipper_util_gif_GifEncoder_Close(JNIEnv *ioEnv, jobject ioThis)
 {
 	if (data32bpp)
 	{
@@ -164,7 +164,7 @@ JNIEXPORT void JNICALL Java_org_jiggawatt_giffle_Giffle_Close(JNIEnv *ioEnv, job
 
 
 
-JNIEXPORT jint JNICALL Java_org_jiggawatt_giffle_Giffle_AddFrame(JNIEnv *ioEnv, jobject ioThis, jintArray inArray)
+JNIEXPORT jint JNICALL Java_com_whumr_gifzipper_util_gif_GifEncoder_AddFrame(JNIEnv *ioEnv, jobject ioThis, jintArray inArray)
 {
 	ioEnv->GetIntArrayRegion(inArray, (jint)0, (jint)(inDIB.width * inDIB.height), (jint*)(inDIB.bits));
 
@@ -188,7 +188,7 @@ JNIEXPORT jint JNICALL Java_org_jiggawatt_giffle_Giffle_AddFrame(JNIEnv *ioEnv, 
 	return 0;
 }
 
-JNIEXPORT jstring JNICALL Java_org_jiggawatt_giffle_Giffle_test(JNIEnv *ioEnv, jobject ioThis)
+JNIEXPORT jstring JNICALL Java_com_whumr_gifzipper_util_gif_GifEncoder_test(JNIEnv *ioEnv, jobject ioThis)
 {
 	return ioEnv->NewStringUTF("Hello from JNI !");
 }

@@ -38,7 +38,7 @@ import android.widget.Toast;
 
 public class SelectPicActivity extends BaseActivity implements OnDirSelectListener {
 	
-	public static String KEY_MAX_COUNT = "max_count", KEY_PICS = "pics", KEY_SINGLE = "single", KEY_CUT = "cut";
+	public static String KEY_MAX_COUNT = "max_count", KEY_PICS = "pics", KEY_SINGLE = "single", KEY_CUT = "cut", KEY_TYPE = "type";
 	public static int DEFAULT_MAX_COUNT = 9, CUT_CODE = 100;
 	
 	private ProgressDialog progress_dialog;
@@ -62,6 +62,7 @@ public class SelectPicActivity extends BaseActivity implements OnDirSelectListen
 	
 	private boolean single = false;
 	private boolean cut_pic = false;
+	private String select_type = null;
 
 	private DirPopupWindow dir_popup;
 
@@ -94,6 +95,8 @@ public class SelectPicActivity extends BaseActivity implements OnDirSelectListen
 			max_count = intent.getIntExtra(KEY_MAX_COUNT, DEFAULT_MAX_COUNT);
 		if (intent.hasExtra(KEY_CUT) && intent.getBooleanExtra(KEY_CUT, false))
 			cut_pic = true;
+		if (intent.hasExtra(KEY_TYPE))
+			select_type = intent.getStringExtra(KEY_TYPE);
 	}
 
 	private void initView() {
@@ -126,9 +129,7 @@ public class SelectPicActivity extends BaseActivity implements OnDirSelectListen
 				ContentResolver mContentResolver = getContentResolver();
 				// 只查询jpeg和png的图片
 				Cursor cursor = mContentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, new String[] {MediaStore.Images.Media.DATA},
-						MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?",
-						new String[] {"image/jpeg", "image/png"},
-						MediaStore.Images.Media.DATE_MODIFIED + " desc");
+						getQueryString(), getQueryArgs(), MediaStore.Images.Media.DATE_MODIFIED + " desc");
 				while (cursor.moveToNext()) {
 					// 获取图片的路径
 					String path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
@@ -162,6 +163,31 @@ public class SelectPicActivity extends BaseActivity implements OnDirSelectListen
 				handler.sendEmptyMessage(0);
 			}
 		}).start();
+	}
+	
+	private String getQueryString() {
+		if (select_type == null)
+			return MediaStore.Images.Media.MIME_TYPE + "=? or " + MediaStore.Images.Media.MIME_TYPE + "=?";
+		else {
+			int size = select_type.split(",").length;
+			StringBuilder buffer = new StringBuilder(MediaStore.Images.Media.MIME_TYPE + "=?");
+			for (int i = 1; i < size; i++) {
+				buffer.append(" or " + MediaStore.Images.Media.MIME_TYPE + "=?");
+			}
+			return buffer.toString();
+		}
+	}
+
+	private String[] getQueryArgs() {
+		if (select_type == null)
+			return new String[] {"image/jpeg", "image/png"};
+		else {
+			String[] args = select_type.split(",");
+			for (int i = 0; i < args.length; i++) {
+				args[i] = "image/" + args[i];
+			}
+			return args;
+		}
 	}
 	
 	private void setGridView() {

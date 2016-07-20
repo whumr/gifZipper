@@ -8,7 +8,8 @@
     <string name="ratio_tip">压缩比,2的整数倍</string>
     <string name="file_size">帧大小</string>
     <string name="file_size_tip">每帧的文件最大值，单位kb</string>
-    <string name="zip">压缩</string>
     <string name="choose">选择图片</string>
+    <string name="decode">decode</string>
+    <string name="encode">encode</string>
 	
 </resources>

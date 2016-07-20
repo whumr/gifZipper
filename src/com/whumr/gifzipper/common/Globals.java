@@ -14,7 +14,8 @@ import android.graphics.Bitmap;
 public class Globals {
 
 	/** 手机目录名称 **/
-	public static final String PATH_BASE = "gifZipper", IMG_DIR = "img", LOG_DIR = "log";
+	public static final String PATH_BASE = "/gifZipper/", IMG_DIR = "img", LOG_DIR = "log";
+	public static final String GIF_PATH = PATH_BASE, GIF_TMP_PATH = GIF_PATH + "tmp/";
 	
 	public static final String COMMON_RESULT = "result";
 	

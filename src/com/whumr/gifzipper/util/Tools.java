@@ -144,14 +144,19 @@ public class Tools {
 	}
 	
 	public static void selectSinglePic(Activity activity, int request_code) {
-		selectSinglePic(activity, request_code, false);
+		selectSinglePic(activity, request_code, false, null);
+	}
+
+	public static void selectSinglePic(Activity activity, int request_code, String type) {
+		selectSinglePic(activity, request_code, false, type);
 	}
 	
-	public static void selectSinglePic(Activity activity, int request_code, boolean cut) {
+	public static void selectSinglePic(Activity activity, int request_code, boolean cut, String type) {
 		Intent intent = new Intent();
 		intent.setClass(activity, SelectPicActivity.class);
 		intent.putExtra(SelectPicActivity.KEY_SINGLE, true);
 		intent.putExtra(SelectPicActivity.KEY_CUT, cut);
+		intent.putExtra(SelectPicActivity.KEY_TYPE, type);
 		activity.startActivityForResult(intent, request_code);
 	}
 	

@@ -1,154 +1,110 @@
 package com.whumr.gifzipper;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
-import org.jiggawatt.giffle.Giffle;
 
 import com.whumr.gifzipper.common.BaseActivity;
 import com.whumr.gifzipper.common.Globals;
-import com.whumr.gifzipper.util.GifDecoder;
-import com.whumr.gifzipper.util.ImageFactory;
+import com.whumr.gifzipper.util.FileUtil;
 import com.whumr.gifzipper.util.Tools;
-import com.whumr.gifzipper.util.ViedoUtil;
+import com.whumr.gifzipper.util.gif.GifDecoder;
+import com.whumr.gifzipper.util.gif.GifEncoder;
+import com.whumr.gifzipper.util.gif.GifUtil;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
 
+@SuppressLint("HandlerLeak")
 public class MainActivity extends BaseActivity {
 	
 	private static String TAG = MainActivity.class.getSimpleName();
-	private Giffle giffle;
+	private GifEncoder gifEncoder;
 	private GifDecoder gifDecoder;
+	private Uri gifUri;
+	private String gifName;
 	
-	private EditText name_txt, ratio_txt, size_txt;
-	private static String PATH = "/gifZipper/", TEMP_PATH = "/gifZipper/tmp/";
+	private Handler decodeHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch(msg.what) {
+				case GifUtil.GIF_NOT_EXISTS :
+					toastShort("gif文件不存在");
+					break;
+				case GifUtil.GIF_DECODE_SUCCESS :
+					toastShort("解码成功");
+					break;
+				case GifUtil.GIF_DECODE_FAIL :
+					toastShort("解码失败");
+					break;
+			}
+		};
+	};
+
+	private Handler encodeHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch(msg.what) {
+				case GifUtil.GIF_ENCODE_SUCCESS :
+					toastShort("编码成功");
+					break;
+				case GifUtil.GIF_ENCEODE_FAIL :
+					toastShort("编码失败");
+					break;
+			}
+		};
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		giffle = new Giffle();
-		findViewById(R.id.zip_btn).setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				Log.i(TAG, giffle.test());
-//				decodeGif();
-				new Thread(new Runnable() {
-					@Override
-					public void run() {
-						ViedoUtil.getImg("");
-					}
-				}).start();
-			}
-		});
+		gifDecoder = new GifDecoder();
+		gifEncoder = new GifEncoder();
+		//选择图片
 		findViewById(R.id.choose_btn).setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View arg0) {
-				Tools.selectSinglePic(MainActivity.this, Globals.CODE_SELECT_PIC);
+				Tools.selectSinglePic(MainActivity.this, Globals.CODE_SELECT_PIC, "gif");
 			}
 		});
-		name_txt = (EditText)findViewById(R.id.name_txt);
-		ratio_txt = (EditText)findViewById(R.id.ratio_txt);
-		size_txt = (EditText)findViewById(R.id.size_txt);
-		checkDir();
-	}
-	
-	private void checkDir() {
-		File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + TEMP_PATH);
-		if (!dir.exists())
-			dir.mkdirs();
-	}
-	
-	private void clearTmp() {
-		deleteAllFiles(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + TEMP_PATH));
-	}
-
-	private void deleteAllFiles(File root) {
-		if (root.exists()) {
-			File files[] = root.listFiles();
-			if (files != null) {
-				for (File f : files) {
-					if (f.isDirectory()) { // 判断是否为文件夹
-						deleteAllFiles(f);
-						try {
-							f.delete();
-						} catch (Exception e) {
+		//解码
+		findViewById(R.id.decode_btn).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (gifUri == null) {
+					toastShort("请选择gif文件");
+				} else {
+					FileUtil.checkDir(Globals.GIF_TMP_PATH);
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							GifUtil.decodeGif(gifDecoder, decodeHandler, gifUri);
 						}
-					} else {
-						if (f.exists()) { // 判断是否存在
-							try {
-								f.delete();
-							} catch (Exception e) {
-							}
-						}
-					}
+					}).start();
 				}
 			}
-		}
-	}
-	
-	private void decodeGif() {
-		checkDir();
-		File gifFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + PATH + name_txt.getText().toString() + ".gif");
-		if (!gifFile.exists()) {
-			toastShort("文件不存在");
-		} else {
-			int ratio = 1, fileSize = 0;
-			try {
-				ratio = Integer.parseInt(ratio_txt.getText().toString());
-				fileSize = Integer.parseInt(size_txt.getText().toString());
-			} catch (Exception e) {
-				toastShort("参数不正确");
-				return;
-			}
-			try {
-				gifDecoder = new GifDecoder();
-	            gifDecoder.read(new FileInputStream(gifFile));
-	            clearTmp();
-	            int size = gifDecoder.getFrameCount();
-				for (int i = 0; i < size; i++) {
-					Bitmap bitmap = gifDecoder.getFrame(i);
-					saveMyBitmap(bitmap, i + "", ratio, fileSize);
+		});
+		//编码
+		findViewById(R.id.encode_btn).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				if (gifUri == null) {
+					toastShort("请选择gif文件");
+				} else {
+					Log.i(TAG, gifEncoder.test());
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							GifUtil.encodeGif(gifEncoder, encodeHandler, gifName);
+						}
+					}).start();
 				}
-	            Log.i(TAG, "size:" + size);
-	            encodeGif(size);
-	        } catch (Exception e) {
-	            Log.e(TAG, "decodeGif error", e);
-	            toastShort("压缩图片失败");
-	        }
-		}
-	}
-	
-	private void encodeGif(int size) {
-		String tempPath = Environment.getExternalStorageDirectory().getAbsolutePath() + TEMP_PATH;
-		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + PATH;
-		Bitmap[] bitmaps = new Bitmap[size];
-		for (int i = 0; i < bitmaps.length; i++) {
-			bitmaps[i] = BitmapFactory.decodeFile(tempPath + i + ".jpg");
-		}
-		giffle.Encode(path + "result.gif", bitmaps, 10);
-		toastShort("压缩完成");
-	}
-	
-	private void saveMyBitmap(Bitmap mBitmap, String bitName, int ratio, int fileSize) throws IOException {
-		ImageFactory imageFactory = ImageFactory.getInstance();
-//			imageFactory.ratioAndGenThumb(mBitmap, Environment.getExternalStorageDirectory().getAbsolutePath() + "/test/" + bitName + ".jpg", 
-//					mBitmap.getWidth() / 4, mBitmap.getHeight() / 4);
-		mBitmap = imageFactory.ratio(mBitmap, mBitmap.getWidth() / ratio, mBitmap.getHeight() / ratio);
-		imageFactory.compressAndGenImage(mBitmap, Environment.getExternalStorageDirectory().getAbsolutePath() + TEMP_PATH + bitName + ".jpg", fileSize);
+			}
+		});
 	}
 	
 	@Override
@@ -157,11 +113,11 @@ public class MainActivity extends BaseActivity {
 			Uri img_uri = data.getData();   
             if (img_uri != null) {   
                 try {   
-                	Bitmap image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), img_uri);   
-                	if (image != null) {
-                		toastShort(img_uri.toString());
-                    } else
-                    	toastShort("无法选择该图片");
+            		toastShort(img_uri.toString());
+            		File file = new File(img_uri.getPath());
+            		toastShort("" + file.exists());
+            		gifUri = img_uri;
+            		gifName = file.getName();
                 } catch (Exception e) {   
                     e.printStackTrace();   
                     toastShort("无法选择该图片\n" + e.getMessage());
